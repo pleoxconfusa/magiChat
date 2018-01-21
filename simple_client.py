@@ -13,8 +13,9 @@ def load_encoding():
     with open(magic_file_name, 'r') as f:
         for lines in f:
             value, key = lines.split(':')[0], lines.split(':')[1]
-            x_list = value.split(' ')
+            x_list = value.split(' ') 
             x_list = x_list[:-1] #maybe. may cause errors
+            
             x_list = list(map(int, x_list))
             x_tuple = tuple(x_list)
             scheme_dict[key] = x_tuple
