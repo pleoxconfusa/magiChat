@@ -15,8 +15,7 @@ def Main():
    sock.bind((MMU_IP, MMU_PORT))
     # become a server socket
    while True:
-       (data, addr) = sock.recvfrom(int(BUFFER/8)) # buffer size is 1024 bytes
-       # print("received message:", data)
+       (data, addr) = sock.recvfrom(int(BUFFER/8))
        # if number of bytes in data %10 = 0 then ->
        if (len(BitArray(bytes=data).bin) % 10) == 0:
            print(MMU_decode(data))

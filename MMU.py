@@ -149,13 +149,7 @@ def MMU_decode(message, scheme_dict=DEF_DECODING_SCHEME):
     """
     output = "" 
 
-    #take in the message and pull out magic squares
-
-    #turn message to bytes
-    #turn bytes of message to bitstring
-
     bitstr = BitArray(bytes=message).bin
-    # print(bitstr)
 
     characters = []
     for i in range(int(len(message)/10)):
@@ -168,7 +162,6 @@ def MMU_decode(message, scheme_dict=DEF_DECODING_SCHEME):
             #   in this list is 16 5 bit bitstrings
         characters.append(cur_char) #may have to copy this list because of garbage collection
 
-    # print(characters)
     for c in characters:
         for i in range(16):
             if c[i] not in ERR_DET_MAP_REV.keys():
@@ -176,24 +169,16 @@ def MMU_decode(message, scheme_dict=DEF_DECODING_SCHEME):
             else:
                 c[i] = ERR_DET_MAP_REV.get(c[i])
         c_tup = tuple(c)
-        #print(c_tup)
         if c_tup not in scheme_dict.keys():
             output = output+reconstruct(c_tup,scheme_dict)
         else:
             output = output + scheme_dict.get(c_tup)
 
 
-        #turn c in characters into a tuple
 
-        #look up tuple in scheme_dict
-        #if not in scheme_dict.keys()
-        #   output = output + reconstruct(key, scheme_dict)
-        #else
-        #   output = output + scheme_dict.get(key)
 
-    return output #return date/time string + output + \n
-    #if magic square matches, keep it, else store it.
-    #reconstruct magic squares that need to be reconstructed
+    return output
+    
     
 def MMU_encode(data, scheme_dict=DEF_ENCODING_SCHEME):
     """ This function takes a bitstring of length %80 = 0 and converts it into
@@ -219,9 +204,5 @@ def MMU_encode(data, scheme_dict=DEF_ENCODING_SCHEME):
             st = st + ERR_DET_MAPPING.get(i)
     
     #convert str to binary bitstring
-    # st = int(st, 2);
-    # print(st)
     x = int(st, 2)
-    # print(x)
-    # print((x).to_bytes((x.bit_length() + 7) // 8, byteorder='big'))
     return (x).to_bytes((x.bit_length() + 7) // 8, byteorder='big')
