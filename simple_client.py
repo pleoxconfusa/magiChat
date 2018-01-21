@@ -3,7 +3,8 @@ import socket
 magic_file_name = "squares.txt"
 BUFFER = 20480
 
-err_det_mapping = { 0: "00000", 1: "00011", }
+err_det_mapping = { 0: "00000", 1: "00011", 2: "00101", 3: "00110", 4: "01001", 5: "01010", 6: "01100", 7: "01111", 8: "10001", 9: "10010", 10: "10100",
+11: "10111", 12: "11000", 13: "11011", 14: "11101", 15: "11110"}
 
 def load_encoding():
      #Function to load dictionary of ascii -> 48bit data from text file
@@ -31,7 +32,7 @@ def encode(data, scheme_dict):
         str = str + err_det_mapping(char)
     
     #convert str to binary bitstring
-    
+    str = int(str, 2);
     return str;
     
 def Main():
