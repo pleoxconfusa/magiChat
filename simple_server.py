@@ -23,8 +23,28 @@ def load_encoding():
 
     return scheme_dict
  
-def reconstruct(square):
-    return ''
+def reconstruct(square, scheme_dict):
+    highest_sim = 0
+    sim_key = ""
+    
+    for key in scheme_dict.keys():
+        sim_count = 0
+        
+        for i in range(len(square)):
+            if square[i] is not "":
+                if square[i] == key[i]:
+                    sim_count = sim_count + 1
+                else:
+                    sim_count = sim_count - 1
+                    
+        if sim_count > highest_sim:
+            sim_key = key
+            highest_sim = sim_count
+        
+    if sim_key is "":
+        return ""
+    else:
+        return scheme_dict.get(sim_key)
 
 def decode(message, scheme_dict):
     #take in the message and pull out magic squares
