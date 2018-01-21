@@ -109,7 +109,7 @@ def Main():
         # print("received message:", data)
 
         # if number of bytes in data %10 = 0 then ->
-        if len(bytes) % 10 = 0:
+        if (len(bytes) % 10) == 0:
             print(decode(data))
              
     sock.close()
