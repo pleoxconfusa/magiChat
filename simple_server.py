@@ -57,10 +57,11 @@ def decode(message, scheme_dict):
     #turn message to bytes
     #turn bytes of message to bitstring
 
-    bitstr = BitArray(bytes=message, length=80, offset=0).bin
+    bitstr = BitArray(bytes=message).bin
+    # print(bitstr)
 
     characters = []
-    for i in range(len(message)/10):
+    for i in range(int(len(message)/10)):
         #keep iterating until end of message. this can be found as i in range(len(message)/10)
         cur_char = []
         for j in range(16):
@@ -70,7 +71,7 @@ def decode(message, scheme_dict):
             #   in this list is 16 5 bit bitstrings
         characters.append(cur_char) #may have to copy this list because of garbage collection
 
-    print(characters)
+    # print(characters)
     for c in characters:
         for i in range(16):
             if c[i] not in err_det_map_rev.keys():
@@ -78,10 +79,11 @@ def decode(message, scheme_dict):
             else:
                 c[i] = err_det_map_rev.get(c[i])
         c_tup = tuple(c)
+        print(c_tup)
         if c_tup not in scheme_dict.keys():
             output = output+reconstruct(c_tup,scheme_dict)
         else:
-            output = output + scheme_dict.get(key)
+            output = output + scheme_dict.get(c_tup)
 
 
         #turn c in characters into a tuple
@@ -107,10 +109,9 @@ def Main():
     while True:
         (data, addr) = sock.recvfrom(int(BUFFER/8)) # buffer size is 1024 bytes
         # print("received message:", data)
-
         # if number of bytes in data %10 = 0 then ->
-        if (len(bytes) % 10) == 0:
-            print(decode(data))
+        if (len(BitArray(bytes=data).bin) % 10) == 0:
+            print(decode(data, scheme_dict))
              
     sock.close()
      
