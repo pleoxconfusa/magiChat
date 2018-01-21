@@ -1,3 +1,8 @@
+"""
+This simple client program allows messages to be encoded with MMU and sent over
+UDP to a pre-designated simple server program.  This is for PoC.
+"""
+
 import socket
 from MMU import *
 BUFFER = 20480

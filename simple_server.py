@@ -1,3 +1,8 @@
+"""
+This simple server program allows messages to be received over UDP from a simple
+client server program and decoded with MMU.
+"""
+
 import socket
 from MMU import *
 BUFFER = 20480
