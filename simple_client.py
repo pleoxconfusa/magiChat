@@ -1,6 +1,5 @@
 import socket
 from bitstring import BitArray
-
 magic_file_name = "squares.txt"
 BUFFER = 20480
 

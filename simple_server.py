@@ -79,7 +79,7 @@ def decode(message, scheme_dict):
             else:
                 c[i] = err_det_map_rev.get(c[i])
         c_tup = tuple(c)
-        print(c_tup)
+        #print(c_tup)
         if c_tup not in scheme_dict.keys():
             output = output+reconstruct(c_tup,scheme_dict)
         else:
@@ -94,7 +94,7 @@ def decode(message, scheme_dict):
         #else
         #   output = output + scheme_dict.get(key)
 
-    return output + "\n" #return date/time string + output + \n
+    return output #return date/time string + output + \n
     #if magic square matches, keep it, else store it.
     #reconstruct magic squares that need to be reconstructed
 
