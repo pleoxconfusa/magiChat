@@ -43,6 +43,7 @@ def encode(data, scheme_dict):
     # print((x).to_bytes((x.bit_length() + 7) // 8, byteorder='big'))
     return (x).to_bytes((x.bit_length() + 7) // 8, byteorder='big')
     
+
 def Main():
     MNU_IP = "127.0.0.1"
     MNU_PORT = 63545
