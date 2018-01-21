@@ -51,7 +51,8 @@ def Main():
     while True:
         message = input("Send Data:")
         while len(message) >= 256:
-            message = input("Send Data:")
+            message = input("Err: Too large.\nSend Data:")
+            sock.sendto(encode("!!!Large message unable to send!!!", scheme_dict),(MNU_IP, MNU_PORT))
         
         if message:
             sock.sendto(encode(message, scheme_dict), (MNU_IP, MNU_PORT))

@@ -38,7 +38,7 @@ def reconstruct(square, scheme_dict):
                 if square[i] == key[i]:
                     sim_count = sim_count + 1
                 else:
-                    sim_count = sim_count - 1
+                    sim_count = -16
                     
         if sim_count > highest_sim:
             sim_key = key
