@@ -8,19 +8,6 @@ reconstructed with large portions of data missing.
 
 
 ## What it does 
-       o          o
-        \   /\   /
-         \ /* \ /
-          (__*_)
-    _______(oo) - I am Alfonso.
-   /|  ___  \/
-  / | {M U}||
- *  ||{_M_}||
-    ||-----||
-    ^^     ^^
-    
-BEHOLD, ALFONSO: OUR MAGIC COW!
-
 
 This program is a PoC for a future package class.  The MMU program implements
 the use of Pan-Magic Squares as a coding mechanism for 8-bit data.  The traditional
