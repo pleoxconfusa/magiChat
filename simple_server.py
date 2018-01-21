@@ -7,7 +7,6 @@ def load_encoding():
     #Function to load dictionary of ascii -> 48bit data from text file
     scheme_dict = {}
     #load file
-    #[########]:HEX
     with open(magic_file_name, 'r') as f:
         for lines in f:
             x = lines.split(':')[0]
@@ -19,41 +18,51 @@ def load_encoding():
         f.close()
 
     #generate dictionary from file
-    print(scheme_dict)
+    # print(scheme_dict)
     #return dictionary
 
     return scheme_dict
  
-# def decode(message, scheme_dict):
+def reconstruct(square):
+    return ''
+
+def decode(message, scheme_dict):
     #take in the message and pull out magic squares
     #80 bits into 16 -> 5 bit bitstrings
-
+    return 'great'
     #if magic square matches, keep it, else store it.
     #reconstruct magic squares that need to be reconstructed
 
 def Main():
-    host = "127.0.0.1"
-    port = 63544
+    MNU_IP = "127.0.0.1"
+    MNU_PORT = 63545
     scheme_dict = load_encoding()
 
      
-    mySocket = socket.socket()
-    mySocket.bind((host,port))
-     
-    mySocket.listen(1)
-    conn, addr = mySocket.accept()
-    print ("Connection from: " + str(addr))
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.bind((MNU_IP, MNU_PORT))
+	# become a server socket
+
+    # while True:
+        # accept connections from outside
+        # (clientsocket, address) = serversocket.accept()
+        # now do something with the clientsocket
+        # in this case, we'll pretend this is a threaded server
     while True:
-            data = conn.recv(BUFFER).decode()
-            if not data:
-                    break
-            print ("from connected  user: " + str(data))
+        (data, addr) = sock.recvfrom(int(BUFFER/8)) # buffer size is 1024 bytes
+        # print("received message:", data)
+        print(decode(data))
+    # while True:
+    #         data = conn.recv(BUFFER).decode()
+    #         if not data:
+    #                 break
+    #         print ("from connected  user: " + str(data))
              
-            data = str(data).upper()
-            print ("sending: " + str(data))
-            conn.send(data.encode())
+    #         data = str(data).upper()
+    #         print ("sending: " + str(data))
+    #         conn.send(data.encode())
              
-    conn.close()
+    sock.close()
      
 if __name__ == '__main__':
     Main()

@@ -23,7 +23,7 @@ def Main():
         port = 63544
         scheme_dict = load_encoding()
          
-        mySocket = socket.socket()
+        mySocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         mySocket.connect((host,port))
          
         message = input(" -> ")
