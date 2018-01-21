@@ -1,5 +1,7 @@
 import socket
 
+magic_file_name = "squares.txt"
+
 def load_encoding():
     #Function to load dictionary of ascii -> 48bit data from text file
     scheme_dict = {}
@@ -7,17 +9,24 @@ def load_encoding():
     #[########]:HEX
     with open(magic_file_name, 'r') as f:
         for lines in f:
-            x = lines.split('[')[1]
-            scheme_dict[x.split(']')[0]] = lines.split(':')[1].replace('\n','')
+            x = lines.split(':')[0]
+            scheme_dict[x] = chr(int(lines.split(':')[1].replace('\n','')))
         f.close()
 
     #generate dictionary from file
-    printf(scheme_dict)
+    # print(scheme_dict)
     #return dictionary
     #48 bit -bitstream
     #12 length hex per char
     return scheme_dict
  
+def decode(message, scheme_dict):
+    #take in the message and pull out magic squares
+    x = list(message)
+
+    #if magic square matches, keep it, else store it.
+    #reconstruct magic squares that need to be reconstructed
+
 def Main():
     host = "127.0.0.1"
     port = 63544
