@@ -1,31 +1,18 @@
-import socket
 from bitstring import BitArray
+from MMU_load_coding import *
 
-magic_file_name = "squares.txt"
-BUFFER = 20480
+ERR_DET_MAPPING = { 0: "00000", 1: "00011", 2: "00101", 3: "00110", 4: "01001", 
+5: "01010", 6: "01100", 7: "01111", 8: "10001", 9: "10010", 10: "10100",
+11: "10111", 12: "11000", 13: "11011", 14: "11101", 15: "11110"}
 
-err_det_map_rev = {"00000": 0, "00011" : 1, "00101" : 2, "00110" : 3, "01001" : 4, "01010" : 5, "01100" : 6, "01111" : 7, "10001" : 8, "10010" : 9, "10100" : 10, "10111" : 11, "11000" : 12, "11011" : 13, "11101" : 14, "11110" : 15}
+ERR_DET_MAP_REV = {"00000": 0, "00011" : 1, "00101" : 2, "00110" : 3, "01001" : 4, 
+"01010" : 5, "01100" : 6, "01111" : 7, "10001" : 8, "10010" : 9, "10100" : 10, 
+"10111" : 11, "11000" : 12, "11011" : 13, "11101" : 14, "11110" : 15}
 
-def load_encoding():
-    #Function to load dictionary of ascii -> 48bit data from text file
-    scheme_dict = {}
-    #load file
-    with open(magic_file_name, 'r') as f:
-        for lines in f:
-            x = lines.split(':')[0]
-            x_list = x.split(' ')
-            x_list = x_list[:-1]
-            x_list = list(map(int, x_list))
-            x_tuple = tuple(x_list)
-            scheme_dict[x_tuple] = chr(int(lines.split(':')[1].replace('\n','')))
-        f.close()
+DEF_ENCODING_SCHEME = load_encoding()
+DEF_DECODING_SCHEME = load_decoding()
 
-    #generate dictionary from file
-    # print(scheme_dict)
-    #return dictionary
-
-    return scheme_dict
- 
+    
 def reconstruct(square, scheme_dict):
     highest_sim = 0
     sim_key = ""
@@ -38,7 +25,7 @@ def reconstruct(square, scheme_dict):
                 if square[i] == key[i]:
                     sim_count = sim_count + 1
                 else:
-                    sim_count = sim_count - 1
+                    sim_count = -16
                     
         if sim_count > highest_sim:
             sim_key = key
@@ -48,8 +35,8 @@ def reconstruct(square, scheme_dict):
         return ""
     else:
         return scheme_dict.get(sim_key)
-
-def decode(message, scheme_dict):
+        
+def MMU_decode(message, scheme_dict=DEF_DECODING_SCHEME):
     output = "" 
 
     #take in the message and pull out magic squares
@@ -74,12 +61,12 @@ def decode(message, scheme_dict):
     # print(characters)
     for c in characters:
         for i in range(16):
-            if c[i] not in err_det_map_rev.keys():
+            if c[i] not in ERR_DET_MAP_REV.keys():
                 c[i] = -1
             else:
-                c[i] = err_det_map_rev.get(c[i])
+                c[i] = ERR_DET_MAP_REV.get(c[i])
         c_tup = tuple(c)
-        print(c_tup)
+        #print(c_tup)
         if c_tup not in scheme_dict.keys():
             output = output+reconstruct(c_tup,scheme_dict)
         else:
@@ -94,26 +81,22 @@ def decode(message, scheme_dict):
         #else
         #   output = output + scheme_dict.get(key)
 
-    return output + "\n" #return date/time string + output + \n
+    return output #return date/time string + output + \n
     #if magic square matches, keep it, else store it.
     #reconstruct magic squares that need to be reconstructed
-
-def Main():
-    MNU_IP = "127.0.0.1"
-    MNU_PORT = 63545
-    scheme_dict = load_encoding()
-     
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.bind((MNU_IP, MNU_PORT))
-	# become a server socket
-    while True:
-        (data, addr) = sock.recvfrom(int(BUFFER/8)) # buffer size is 1024 bytes
-        # print("received message:", data)
-        # if number of bytes in data %10 = 0 then ->
-        if (len(BitArray(bytes=data).bin) % 10) == 0:
-            print(decode(data, scheme_dict))
-             
-    sock.close()
-     
-if __name__ == '__main__':
-    Main()
+    
+def MMU_encode(data, scheme_dict=DEF_ENCODING_SCHEME):
+    st = ''
+    for char in data:
+        magic = scheme_dict.get(ord(char))
+        magic_list = list(magic)
+        for i in magic_list:
+            st = st + ERR_DET_MAPPING.get(i)
+    
+    #convert str to binary bitstring
+    # st = int(st, 2);
+    # print(st)
+    x = int(st, 2)
+    # print(x)
+    # print((x).to_bytes((x.bit_length() + 7) // 8, byteorder='big'))
+    return (x).to_bytes((x.bit_length() + 7) // 8, byteorder='big')
