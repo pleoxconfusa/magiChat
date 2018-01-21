@@ -8,7 +8,7 @@ import select
 RECV_BUFF = 4096
 port =63544
 Host =''
-SOCK_LIST=[]
+SOCKET_LIST=[]
 
 #subject to change
 def load_encoding():
@@ -39,7 +39,7 @@ def chat_server():
     # add server socket object to the list of readable connections
     SOCKET_LIST.append(server_socket)
  
-    print "Chat server started on " + str(port)
+    print("Chat server started on " + str(port))
  
     while 1:
 
@@ -52,19 +52,22 @@ def chat_server():
             if sock == server_socket: 
                 sockfd, addr = server_socket.accept()
                 SOCKET_LIST.append(sockfd)
-                print "Client (%s, %s) connected" % addr
-                 
-                broadcast(server_socket, sockfd, "[%s:%s] entered our chatting room\n" % addr)
+                print("Client (%s, %s) connected" % addr)
+                data = sock.recv(RECV_BUFFER).decode
+                print(data)
+                # broadcast(server_socket, sockfd, "[%s:%s] entered our chatting room\n" % addr)
              
             # a message from a client, not a new connection
             else:
                 # process data recieved from client, 
                 try:
                     # receiving data from the socket.
-                    data = sock.recv(RECV_BUFFER)
+                    data = sock.recv(RECV_BUFFER).decode
                     if data:
                         # there is something in the socket
-                        broadcast(server_socket, sock, "\n" + '[' + str(sock.getpeername()) + '] ' + decode(data))  
+                        # print(data)
+                        # broadcast(server_socket, sock, "\n" + '[' + str(sock.getpeername()) + '] ' + decode(data))  
+                        print(data)
                     else:
                         # remove the socket that's broken    
                         if sock in SOCKET_LIST:
@@ -87,7 +90,9 @@ def broadcast (server_socket, sock, message):
         # send the message only to peer
         if socket != server_socket and socket != sock :
             try :
-                socket.send(message)
+                print(message)
+                socket.send(message.encode())
+
             except :
                 # broken socket connection
                 socket.close()
@@ -100,6 +105,7 @@ def broadcast (server_socket, sock, message):
 def decode(message, scheme_dict):
     #take in the message and pull out magic squares
     list(message)
+    return message.decode()
     #if magic square matches, keep it, else store it.
     #reconstruct magic squares that need to be reconstructed
     #return translation
@@ -108,18 +114,19 @@ def decode(message, scheme_dict):
     #this will be a process run function to receive chats and their times into a dictionary
     
     
-def encode(message, scheme_dict): 
+# def encode(message, scheme_dict): 
 
-def main():
-    #main
+# def main():
+#     #main
+#     chat_server()
+#     #upon close, prompt user to save or discard chat session
+    
+#     #call save handler that will handle our chat handler
+#     # save_handler(chat_handler())
+
+#     #return 0/profit
+#     return 0
+    
+
+if __name__ == "__main__": 
     chat_server()
-    #upon close, prompt user to save or discard chat session
-    
-    #call save handler that will handle our chat handler
-    # save_handler(chat_handler())
-
-    #return 0/profit
-    return 0
-    
-
-if __name__ == "__main__": main()  
